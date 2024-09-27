@@ -13,7 +13,13 @@
         android:theme="@style/Theme.Kotlin2DGameExample"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ResultScreenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GameScreenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

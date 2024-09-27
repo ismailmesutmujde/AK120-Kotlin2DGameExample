@@ -7,6 +7,10 @@ android {
     namespace = "com.ismailmesutmujde.kotlin2dgameexample"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.ismailmesutmujde.kotlin2dgameexample"
         minSdk = 24
