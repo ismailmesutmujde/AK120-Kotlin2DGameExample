@@ -1,7 +1,6 @@
 package com.ismailmesutmujde.kotlin2dgameexample
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,6 +23,7 @@ class GameScreenActivity : AppCompatActivity() {
 
     //Controls
     private var touchControl = false
+    private var startControl = false
 
     private val timer = Timer()
 
@@ -43,25 +43,32 @@ class GameScreenActivity : AppCompatActivity() {
                 //Log.e("Height2", (bindingGameScreen.cl.height).toString())
                 //Log.e("Width2",(bindingGameScreen.cl.width).toString())
 
-                if(event?.action == MotionEvent.ACTION_DOWN){
-                    Log.e("MotionEvent", "ACTION_DOWN : Touched the Screen")
-                }
-                if(event?.action == MotionEvent.ACTION_UP) {
-                    Log.e("MotionEvent", "ACTION_UP : Left the Screen")
-                }
+                if(startControl){
+                    if(event?.action == MotionEvent.ACTION_DOWN){
+                        Log.e("MotionEvent", "ACTION_DOWN : Touched the Screen")
+                        touchControl = true
+                    }
+                    if(event?.action == MotionEvent.ACTION_UP) {
+                        Log.e("MotionEvent", "ACTION_UP : Left the Screen")
+                        touchControl = false
+                    }
+                }else{
+                    startControl = true
 
-                // Main Character's x and y position is taken according to the starting position on the screen
-                mainCharacterX = bindingGameScreen.mainCharacter.x
-                mainCharacterY = bindingGameScreen.mainCharacter.y
 
-                timer.schedule(0,20) {
-                    Handler(Looper.getMainLooper()).post {
-                        if(touchControl){
-                            mainCharacterY -=20.0f
-                        }else{
-                            mainCharacterY +=20.0f
+                    // Main Character's x and y position is taken according to the starting position on the screen
+                    mainCharacterX = bindingGameScreen.mainCharacter.x
+                    mainCharacterY = bindingGameScreen.mainCharacter.y
+
+                    timer.schedule(0,20) {
+                        Handler(Looper.getMainLooper()).post {
+                            if(touchControl){
+                                mainCharacterY -=20.0f
+                            }else{
+                                mainCharacterY +=20.0f
+                            }
+                            bindingGameScreen.mainCharacter.y = mainCharacterY
                         }
-                        bindingGameScreen.mainCharacter.y = mainCharacterY
                     }
                 }
 
