@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ismailmesutmujde.kotlin2dgameexample.databinding.ActivityGameScreenBinding
 import java.util.Timer
 import kotlin.concurrent.schedule
+import kotlin.math.floor
 
 
 class GameScreenActivity : AppCompatActivity() {
@@ -20,6 +21,13 @@ class GameScreenActivity : AppCompatActivity() {
     //Positions
     private var mainCharacterX = 0.0f
     private var mainCharacterY = 0.0f
+    private var blackBoxX = 0.0f
+    private var blackBoxY = 0.0f
+    private var yellowCircleX = 0.0f
+    private var yellowCircleY = 0.0f
+    private var redTriangleX = 0.0f
+    private var redTriangleY = 0.0f
+
 
     //Dimensions
     private var screenWidth = 0
@@ -72,9 +80,8 @@ class GameScreenActivity : AppCompatActivity() {
 
                     timer.schedule(0,20) {
                         Handler(Looper.getMainLooper()).post {
-
                             mainCharacterMovement()
-
+                            movingObjects()
                         }
                     }
                 }
@@ -103,5 +110,33 @@ class GameScreenActivity : AppCompatActivity() {
         }
 
         bindingGameScreen.mainCharacter.y = mainCharacterY
+    }
+
+    fun movingObjects() {
+
+        blackBoxX -= screenWidth/44.0f     //1080 / 44.0f  = 25.0f
+        yellowCircleX -= screenWidth/54.0f //1080 / 54.0f  = 20.0f
+        redTriangleX -= screenWidth/36.0f  //1080 / 36.0f  = 30.0f
+
+        if (blackBoxX < 0.0f ){
+            blackBoxX = screenWidth + 20.0f
+            blackBoxY = floor(Math.random() * screenHeight).toFloat()
+        }
+        bindingGameScreen.blackBox.x = blackBoxX
+        bindingGameScreen.blackBox.y = blackBoxY
+
+        if (yellowCircleX < 0.0f ){
+            yellowCircleX = screenWidth + 20.0f
+            yellowCircleY = floor(Math.random() * screenHeight).toFloat()
+        }
+        bindingGameScreen.yellowCircle.x = yellowCircleX
+        bindingGameScreen.yellowCircle.y = yellowCircleY
+
+        if (redTriangleX < 0.0f ){
+            redTriangleX = screenWidth + 20.0f
+            redTriangleY = floor(Math.random() * screenHeight).toFloat()
+        }
+        bindingGameScreen.redTriangle.x = redTriangleX
+        bindingGameScreen.redTriangle.y = redTriangleY
     }
 }
