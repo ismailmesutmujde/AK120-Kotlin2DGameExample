@@ -10,12 +10,23 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ismailmesutmujde.kotlin2dgameexample.databinding.ActivityGameScreenBinding
+import java.util.Timer
 import kotlin.concurrent.schedule
 
 
 class GameScreenActivity : AppCompatActivity() {
 
     private lateinit var bindingGameScreen : ActivityGameScreenBinding
+
+    //Positions
+    private var mainCharacterX = 0.0f
+    private var mainCharacterY = 0.0f
+
+    //Controls
+    private var touchControl = false
+
+    private val timer = Timer()
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,20 +34,35 @@ class GameScreenActivity : AppCompatActivity() {
         val view = bindingGameScreen.root
         setContentView(view)
 
-        Log.e("Height1", (bindingGameScreen.cl.height).toString())
-        Log.e("Width1",(bindingGameScreen.cl.width).toString())
+        //Log.e("Height1", (bindingGameScreen.cl.height).toString())
+        //Log.e("Width1",(bindingGameScreen.cl.width).toString())
 
         bindingGameScreen.cl.setOnTouchListener(object: View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
-                Log.e("Height2", (bindingGameScreen.cl.height).toString())
-                Log.e("Width2",(bindingGameScreen.cl.width).toString())
+                //Log.e("Height2", (bindingGameScreen.cl.height).toString())
+                //Log.e("Width2",(bindingGameScreen.cl.width).toString())
 
                 if(event?.action == MotionEvent.ACTION_DOWN){
                     Log.e("MotionEvent", "ACTION_DOWN : Touched the Screen")
                 }
                 if(event?.action == MotionEvent.ACTION_UP) {
                     Log.e("MotionEvent", "ACTION_UP : Left the Screen")
+                }
+
+                // Main Character's x and y position is taken according to the starting position on the screen
+                mainCharacterX = bindingGameScreen.mainCharacter.x
+                mainCharacterY = bindingGameScreen.mainCharacter.y
+
+                timer.schedule(0,20) {
+                    Handler(Looper.getMainLooper()).post {
+                        if(touchControl){
+                            mainCharacterY -=20.0f
+                        }else{
+                            mainCharacterY +=20.0f
+                        }
+                        bindingGameScreen.mainCharacter.y = mainCharacterY
+                    }
                 }
 
                 return true
