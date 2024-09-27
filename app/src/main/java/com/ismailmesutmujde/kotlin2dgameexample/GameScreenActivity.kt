@@ -21,6 +21,12 @@ class GameScreenActivity : AppCompatActivity() {
     private var mainCharacterX = 0.0f
     private var mainCharacterY = 0.0f
 
+    //Dimensions
+    private var screenWidth = 0
+    private var screenHeight = 0
+    private var mainCharacterWidth = 0
+    private var mainCharacterHeight = 0
+
     //Controls
     private var touchControl = false
     private var startControl = false
@@ -55,19 +61,20 @@ class GameScreenActivity : AppCompatActivity() {
                 }else{
                     startControl = true
 
-
                     // Main Character's x and y position is taken according to the starting position on the screen
                     mainCharacterX = bindingGameScreen.mainCharacter.x
                     mainCharacterY = bindingGameScreen.mainCharacter.y
 
+                    mainCharacterWidth = bindingGameScreen.mainCharacter.width
+                    mainCharacterHeight = bindingGameScreen.mainCharacter.height
+                    screenWidth = bindingGameScreen.cl.width
+                    screenHeight = bindingGameScreen.cl.height
+
                     timer.schedule(0,20) {
                         Handler(Looper.getMainLooper()).post {
-                            if(touchControl){
-                                mainCharacterY -=20.0f
-                            }else{
-                                mainCharacterY +=20.0f
-                            }
-                            bindingGameScreen.mainCharacter.y = mainCharacterY
+
+                            mainCharacterMovement()
+
                         }
                     }
                 }
@@ -76,5 +83,25 @@ class GameScreenActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    fun mainCharacterMovement() {
+
+        if(touchControl){
+            mainCharacterY -=20.0f
+        }else{
+            mainCharacterY +=20.0f
+        }
+        bindingGameScreen.mainCharacter.y = mainCharacterY
+
+        if(mainCharacterY <= 0.0f){
+            mainCharacterY = 0.0f
+        }
+
+        if(mainCharacterY >= screenHeight - mainCharacterHeight){
+            mainCharacterY = (screenHeight - mainCharacterHeight).toFloat()
+        }
+
+        bindingGameScreen.mainCharacter.y = mainCharacterY
     }
 }
