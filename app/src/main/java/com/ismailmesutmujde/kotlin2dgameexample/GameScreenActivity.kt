@@ -48,6 +48,14 @@ class GameScreenActivity : AppCompatActivity() {
         val view = bindingGameScreen.root
         setContentView(view)
 
+        //Move objects off the screen
+        bindingGameScreen.blackBox.x = -8000.0f
+        bindingGameScreen.blackBox.y = -8000.0f
+        bindingGameScreen.yellowCircle.x = -8000.0f
+        bindingGameScreen.yellowCircle.y = -8000.0f
+        bindingGameScreen.redTriangle.x = -8000.0f
+        bindingGameScreen.redTriangle.y = -8000.0f
+
         //Log.e("Height1", (bindingGameScreen.cl.height).toString())
         //Log.e("Width1",(bindingGameScreen.cl.width).toString())
 
@@ -68,6 +76,9 @@ class GameScreenActivity : AppCompatActivity() {
                     }
                 }else{
                     startControl = true
+
+                    //Makes the user startup warning invisible.
+                    bindingGameScreen.textViewStartGame.visibility = View.INVISIBLE
 
                     // Main Character's x and y position is taken according to the starting position on the screen
                     mainCharacterX = bindingGameScreen.mainCharacter.x
@@ -94,10 +105,12 @@ class GameScreenActivity : AppCompatActivity() {
 
     fun mainCharacterMovement() {
 
+        val mainCharacterVelocity = screenHeight/60.0f     //1280 / 60.0f  = 20.0f
+
         if(touchControl){
-            mainCharacterY -=20.0f
+            mainCharacterY -= mainCharacterVelocity
         }else{
-            mainCharacterY +=20.0f
+            mainCharacterY += mainCharacterVelocity
         }
         bindingGameScreen.mainCharacter.y = mainCharacterY
 
