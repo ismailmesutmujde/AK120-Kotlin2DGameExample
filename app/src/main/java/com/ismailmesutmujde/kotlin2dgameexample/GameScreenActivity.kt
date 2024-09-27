@@ -1,6 +1,7 @@
 package com.ismailmesutmujde.kotlin2dgameexample
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -40,6 +41,8 @@ class GameScreenActivity : AppCompatActivity() {
     private var startControl = false
 
     private val timer = Timer()
+
+    private var score= 0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +96,7 @@ class GameScreenActivity : AppCompatActivity() {
                         Handler(Looper.getMainLooper()).post {
                             mainCharacterMovement()
                             movingObjects()
+                            collisionControl()
                         }
                     }
                 }
@@ -151,5 +155,45 @@ class GameScreenActivity : AppCompatActivity() {
         }
         bindingGameScreen.redTriangle.x = redTriangleX
         bindingGameScreen.redTriangle.y = redTriangleY
+    }
+
+    fun collisionControl() {
+
+        val yellowCircleCenterX = yellowCircleX + bindingGameScreen.yellowCircle.width / 2.0f
+        val yellowCircleCenterY = yellowCircleY + bindingGameScreen.yellowCircle.height / 2.0f
+
+        if (0.0f <= yellowCircleCenterX && yellowCircleCenterX <= mainCharacterWidth
+            && mainCharacterY <= yellowCircleCenterY && yellowCircleCenterY <= mainCharacterY + mainCharacterHeight
+        ) {
+            score += 20
+            yellowCircleX = -10.0f
+        }
+
+        val redTriangleCenterX = redTriangleX + bindingGameScreen.redTriangle.width / 2.0f
+        val redTriangleCenterY = redTriangleY + bindingGameScreen.redTriangle.height / 2.0f
+
+        if (0.0f <= redTriangleCenterX && redTriangleCenterX <= mainCharacterWidth
+            && mainCharacterY <= redTriangleCenterY && redTriangleCenterY <= mainCharacterY + mainCharacterHeight
+        ) {
+            score += 50
+            redTriangleX = -10.0f
+        }
+
+        val blackBoxXCenterX = blackBoxX + bindingGameScreen.blackBox.width / 2.0f
+        val blackBoxXCenterY = blackBoxY + bindingGameScreen.blackBox.height / 2.0f
+
+        if (0.0f <= blackBoxXCenterX && blackBoxXCenterX <= mainCharacterWidth
+            && mainCharacterY <= blackBoxXCenterY && blackBoxXCenterY <= mainCharacterY + mainCharacterHeight
+        ) {
+            blackBoxX = -10.0f
+
+            timer.cancel() // Stop timer
+
+            val intent = Intent(this@GameScreenActivity, ResultScreenActivity::class.java)
+            intent.putExtra("score", score)
+            startActivity(intent)
+        }
+        bindingGameScreen.textViewScore.text = score.toString()
+
     }
 }
